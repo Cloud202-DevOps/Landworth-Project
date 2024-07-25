@@ -1,6 +1,3 @@
-Certainly! Below is the properly formatted `README.md` file based on the content you provided:
-
-```markdown
 # 🌟 AWS CI/CD with CloudFormation 🌟
 
 Welcome to the **AWS CI/CD with CloudFormation** repository! This project is designed to transform your AWS infrastructure management and application deployment processes into a seamless and automated experience using the power of Infrastructure as Code and continuous integration and deployment.
