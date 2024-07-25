@@ -1,0 +1,64 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: IAM Role for accessing RDS instances and performing database operations
+
+Resources:
+  RDSAccessRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: RDSAccessRole
+      AssumeRolePolicyDocument: 
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: 
+                - rds.amazonaws.com
+                - ec2.amazonaws.com
+            Action: sts:AssumeRole
+      Description: Role with permissions to manage RDS instances and databases
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonRDSFullAccess
+      MaxSessionDuration: 3600
+      Path: /
+      Policies:
+        - PolicyName: CustomRDSPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - rds:DescribeDBInstances
+                  - rds:CreateDBInstance
+                  - rds:DeleteDBInstance
+                  - rds:ModifyDBInstance
+                  - rds:StartDBInstance
+                  - rds:StopDBInstance
+                  - rds:RebootDBInstance
+                  - rds:CreateDBCluster
+                  - rds:DeleteDBCluster
+                  - rds:ModifyDBCluster
+                  - rds:StartDBCluster
+                  - rds:StopDBCluster
+                  - rds:CreateDBSnapshot
+                  - rds:DeleteDBSnapshot
+                  - rds:DescribeDBSnapshots
+                  - rds:RestoreDBInstanceFromDBSnapshot
+                  - rds:ListTagsForResource
+                  - rds:TagResource
+                  - rds:UntagResource
+                  - rds:CreateDBParameterGroup
+                  - rds:DeleteDBParameterGroup
+                  - rds:ModifyDBParameterGroup
+                  - rds:ResetDBParameterGroup
+                  - rds:DescribeDBParameterGroups
+                  - rds:DescribeDBParameters
+                Resource: '*'
+      Tags:
+        - Key: env
+          Value: dev
+        - Key: owner
+          Value: devops
+        - Key: name
+          Value: RDSAccessRole
+        - Key: purpose
+          Value: RDS management
