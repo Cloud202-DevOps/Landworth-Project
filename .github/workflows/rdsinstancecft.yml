@@ -22,6 +22,6 @@ jobs:
       - name: Deploy CloudFormation Stack
         run: |
           aws cloudformation deploy \
-            --template-file ./Database/rds-aurora-template.yaml \
+            --template-file Database/rds-aurora-template.yaml \
             --stack-name my-rds-stack \
             --capabilities CAPABILITY_NAMED_IAM
