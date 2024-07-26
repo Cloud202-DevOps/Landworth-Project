@@ -11,7 +11,7 @@ on:
 
 env:
   AWS_REGION: eu-west-2  # Change this to your desired AWS region
-  CFN_TEMPLATE: ec2-template.yml  # Assuming your template is named ec2-template.yml
+  CFN_TEMPLATE: ./VM/ec2-template.yml  # Assuming your template is named ec2-template.yml
   STACK_NAME: my-ec2-stack
   VPC_STACK_NAME: devops-vpc-stack  # Name of your VPC stack
 
