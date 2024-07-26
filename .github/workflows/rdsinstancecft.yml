@@ -17,11 +17,11 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: 'us-west-2'
+          aws-region: 'eu-west-2'
 
       - name: Deploy CloudFormation Stack
         run: |
           aws cloudformation deploy \
-            --template-file Database/rds-aurora-template.yaml \
+            --template-file Database/rds-aurora-template.yml \
             --stack-name my-rds-stack \
             --capabilities CAPABILITY_NAMED_IAM
