@@ -64,7 +64,7 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
       StorageEncrypted: true
       DeletionProtection: false
-      MultiAZ: true
+      # MultiAZ: true - This property is not valid for Aurora DB clusters
 
   MyDBInstance:
     Type: AWS::RDS::DBInstance
