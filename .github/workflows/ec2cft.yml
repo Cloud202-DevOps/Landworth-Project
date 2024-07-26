@@ -26,4 +26,3 @@ jobs:
           --stack-name my-ec2-stack \
           --capabilities CAPABILITY_IAM \
           --parameter-overrides \
-            devops-vpc-stack=your-vpc-stack-name
