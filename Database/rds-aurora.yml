@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Deploy an Amazon Aurora MySQL database cluster
+
+Parameters:
+  DBInstanceClass:
+    Type: String
+    Default: db.t3.medium
+    Description: The instance type of the Aurora database.
+  
+  DBClusterIdentifier:
+    Type: String
+    Default: my-aurora-cluster
+    Description: The identifier for the Aurora cluster.
+  
+  DBInstanceIdentifier:
+    Type: String
+    Default: my-aurora-instance
+    Description: The identifier for the Aurora instance.
+
+  MasterUsername:
+    Type: String
+    NoEcho: true
+    Description: The master username for the Aurora database.
+
+  MasterUserPassword:
+    Type: String
+    NoEcho: true
+    Description: The master password for the Aurora database.
+
+  DBName:
+    Type: String
+    Default: mydatabase
+    Description: The name of the database to create in the cluster.
+
+  VpcId:
+    Type: String
+    Description: The VPC ID where the Aurora instance will be deployed.
+
+  SubnetIds:
+    Type: List<String>
+    Description: The list of subnet IDs where the Aurora instance will be deployed.
+
+  SecurityGroupIds:
+    Type: List<String>
+    Description: The security group IDs to associate with the Aurora instance.
+
+Resources:
+  MyDBCluster:
+    Type: AWS::RDS::DBCluster
+    Properties: 
+      DatabaseName: !Ref DBName
+      MasterUsername: !Ref MasterUsername
+      MasterUserPassword: !Ref MasterUserPassword
+      DBClusterIdentifier: !Ref DBClusterIdentifier
+      Engine: aurora-mysql
+      EngineVersion: '8.0' # Specify the version of Aurora MySQL
+      BackupRetentionPeriod: 7
+      VpcSecurityGroupIds: !Ref SecurityGroupIds
+      DBSubnetGroupName: !Ref DBSubnetGroup
+      StorageEncrypted: true
+      DeletionProtection: false
+      MultiAZ: true
+
+  MyDBInstance:
+    Type: AWS::RDS::DBInstance
+    Properties: 
+      DBInstanceClass: !Ref DBInstanceClass
+      DBInstanceIdentifier: !Ref DBInstanceIdentifier
+      Engine: aurora-mysql
+      EngineVersion: '8.0' # Must match the Aurora cluster engine version
+      DBClusterIdentifier: !Ref MyDBCluster
+      PubliclyAccessible: false
+      DBSubnetGroupName: !Ref DBSubnetGroup
+
+  DBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties: 
+      DBSubnetGroupDescription: "Subnet group for Aurora MySQL"
+      SubnetIds: !Ref SubnetIds
+
+Outputs:
+  DBClusterEndpoint:
+    Description: "The endpoint of the Aurora cluster."
+    Value: !GetAtt MyDBCluster.Endpoint.Address
+
+  DBInstanceEndpoint:
+    Description: "The endpoint of the Aurora instance."
+    Value: !GetAtt MyDBInstance.Endpoint.Address
