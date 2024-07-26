@@ -1,22 +1,46 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'EC2 Instance Creation'
-
-Parameters:
-  VpcStackId:
-    Type: String
-    Description: The Stack ID of the VPC stack to import values from
-    Default: arn:aws:cloudformation:eu-west-2:842387632939:stack/devops-vpc-stack/38bdf580-4b43-11ef-bb4d-06d3e848c961
-
 Resources:
   MyEC2Instance:
-    Type: AWS::EC2::Instance
+    Type: 'AWS::EC2::Instance'
     Properties:
-      InstanceType: t2.micro
+      InstanceType: t2.micro  # Change as needed
       ImageId: ami-07d20571c32ba6cdc
-      KeyName: cdpipeline  
-      SubnetId: 
-        Fn::ImportValue: 
-          !Sub "${VpcStackId.Outputs.Subnet1ID}"
-      SecurityGroupIds: 
-        - Fn::ImportValue: 
-            !Sub "${VpcStackId.Outputs.SecurityGroupID}"
+      KeyName: cdpipeline
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'true'
+          SubnetId: subnet-03a0d01d034cba4dd
+          DeviceIndex: '0'
+          GroupSet:
+            - !Ref MySecurityGroup
+      Tags:
+        - Key: Name
+          Value: devopsEC2Instance
+        - Key: env
+          Value: dev
+        - Key: owner
+          Value: meenal
+        - Key: purpose
+          Value: demo server
+
+  MySecurityGroup:
+    Type: 'AWS::EC2::SecurityGroup'
+    Properties:
+      GroupDescription: 'Allow SSH and HTTP access'
+      VpcId: vpc-0f15e088eb4989f8a
+      SecurityGroupIngress:
+        - IpProtocol: 'tcp'
+          FromPort: '22'
+          ToPort: '22'
+          CidrIp: '0.0.0.0/0'
+        - IpProtocol: 'tcp'
+          FromPort: '80'
+          ToPort: '80'
+          CidrIp: '0.0.0.0/0'
+
+Outputs:
+  InstanceId:
+    Description: 'Instance ID'
+    Value: !Ref MyEC2Instance
+  SecurityGroupId:
+    Description: 'Security Group ID'
+    Value: !Ref MySecurityGroup
