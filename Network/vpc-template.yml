@@ -1,0 +1,132 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'VPC with two subnets and security group'
+
+Parameters:
+  VpcCidr:
+    Type: String
+    Default: 10.0.0.0/16
+    Description: CIDR block for the VPC
+  Subnet1Cidr:
+    Type: String
+    Default: 10.0.1.0/24
+    Description: CIDR block for subnet 1
+  Subnet2Cidr:
+    Type: String
+    Default: 10.0.2.0/24
+    Description: CIDR block for subnet 2
+
+Resources:
+  DevOpsVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsHostnames: true
+      Tags:
+        - Key: Name
+          Value: DevOpsVPC
+        - Key: Team
+          Value: devops
+        - Key: Purpose
+          Value: demo
+        - Key: Owner
+          Value: meenal
+        - Key: env
+          Value: dev
+
+  Subnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref DevOpsVPC
+      AvailabilityZone: !Select [0, !GetAZs '']
+      CidrBlock: !Ref Subnet1Cidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: Subnet1
+
+  Subnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref DevOpsVPC
+      AvailabilityZone: !Select [1, !GetAZs '']
+      CidrBlock: !Ref Subnet2Cidr
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: Subnet2
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref DevOpsVPC
+      InternetGatewayId: !Ref InternetGateway
+
+  RouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref DevOpsVPC
+
+  Route:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+      RouteTableId: !Ref RouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  Subnet1RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Subnet1
+      RouteTableId: !Ref RouteTable
+
+  Subnet2RouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref Subnet2
+      RouteTableId: !Ref RouteTable
+
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "Allow HTTP, SSH, and MySQL"
+      GroupDescription: "Allow HTTP, SSH, and MySQL inbound traffic"
+      VpcId: !Ref DevOpsVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  VpcId:
+    Description: VPC ID
+    Value: !Ref DevOpsVPC
+    Export:
+      Name: !Sub "${AWS::StackName}-VPCID"
+  Subnet1Id:
+    Description: Subnet 1 ID
+    Value: !Ref Subnet1
+    Export:
+      Name: !Sub "${AWS::StackName}-Subnet1ID"
+  Subnet2Id:
+    Description: Subnet 2 ID
+    Value: !Ref Subnet2
+    Export:
+      Name: !Sub "${AWS::StackName}-Subnet2ID"
+  SecurityGroupId:
+    Description: Security Group ID
+    Value: !Ref SecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-SecurityGroupID"

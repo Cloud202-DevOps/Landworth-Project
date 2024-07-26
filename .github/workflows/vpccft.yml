@@ -1,0 +1,58 @@
+name: Deploy VPC CloudFormation Stack
+
+on:
+  push:
+    branches:
+      - dev-m
+  pull_request:
+    branches:
+      - dev-m
+  workflow_dispatch:
+
+env:
+  AWS_REGION: eu-west-2  # Change this to your desired AWS region
+  CFN_TEMPLATE: ./Network/vpc-template.yml  # Assuming your template is named vpc-template.yml
+  STACK_NAME: devops-vpc-stack
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.AWS_REGION }}
+
+    - name: Deploy CloudFormation stack
+      run: |
+        if aws cloudformation describe-stacks --stack-name ${{ env.STACK_NAME }} > /dev/null 2>&1; then
+          echo "Updating existing stack"
+          aws cloudformation update-stack \
+            --stack-name ${{ env.STACK_NAME }} \
+            --template-body file://${{ env.CFN_TEMPLATE }} \
+            --capabilities CAPABILITY_NAMED_IAM
+          
+          echo "Waiting for stack update to complete"
+          aws cloudformation wait stack-update-complete --stack-name ${{ env.STACK_NAME }}
+        else
+          echo "Creating new stack"
+          aws cloudformation create-stack \
+            --stack-name ${{ env.STACK_NAME }} \
+            --template-body file://${{ env.CFN_TEMPLATE }} \
+            --capabilities CAPABILITY_NAMED_IAM
+          
+          echo "Waiting for stack creation to complete"
+          aws cloudformation wait stack-create-complete --stack-name ${{ env.STACK_NAME }}
+        fi
+
+    - name: Get stack outputs
+      run: |
+        aws cloudformation describe-stacks \
+          --stack-name ${{ env.STACK_NAME }} \
+          --query 'Stacks[0].Outputs' \
+          --output table
