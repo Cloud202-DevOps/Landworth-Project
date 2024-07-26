@@ -24,5 +24,4 @@ jobs:
         aws cloudformation deploy \
           --template-file ./VM/ec2-template.yml \
           --stack-name my-ec2-stack \
-          --capabilities CAPABILITY_IAM \
-          --parameter-overrides \
+          --capabilities CAPABILITY_IAM
