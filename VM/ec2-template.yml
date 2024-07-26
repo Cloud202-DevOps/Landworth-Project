@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'EC2 Instance Creation'
+Resources:
+  MyEC2Instance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t2.micro
+      ImageId: ami-07d20571c32ba6cdc
+      KeyName: cdpipeline  
+      SubnetId: 
+        Fn::ImportValue: 
+          !Sub "${devops-vpc-stack}-Subnet1ID"
+      SecurityGroupIds: 
+        - Fn::ImportValue: 
+            !Sub "${devops-vpc-stack}-SecurityGroupID"
