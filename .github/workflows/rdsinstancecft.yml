@@ -13,7 +13,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-<<<<<<< HEAD
+
     - name: Configure AWS credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -33,18 +33,3 @@ jobs:
             MasterUsername=${{ secrets.MASTER_USERNAME }} \
             SubnetIds=${{ secrets.SUBNET_ID }} \
             SecurityGroupIds=${{ secrets.SECURITY_GROUP_ID }}
-=======
-      - name: Set up AWS CLI
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: 'eu-west-2'
-
-      - name: Deploy CloudFormation Stack
-        run: |
-          aws cloudformation deploy \
-            --template-file Database/rds-aurora-template.yml \
-            --stack-name my-rds-stack \
-            --capabilities CAPABILITY_NAMED_IAM
->>>>>>> 6822b3dee25f9f1ba6b09092dfb5022517ad19f4
