@@ -26,10 +26,4 @@ jobs:
         aws cloudformation deploy \
           --template-file Database/rds-aurora-template.yml \
           --stack-name rds-aurora-stack \
-          --capabilities CAPABILITY_NAMED_IAM \
-          --parameter-overrides \
-            MasterUserPassword=${{ secrets.MASTER_USER_PASSWORD }} \
-            VpcId=${{ secrets.VPC_ID }} \
-            MasterUsername=${{ secrets.MASTER_USERNAME }} \
-            SubnetIds=${{ secrets.SUBNET_ID }} \
-            SecurityGroupIds=${{ secrets.SECURITY_GROUP_ID }}
+          --capabilities CAPABILITY_NAMED_IAM
