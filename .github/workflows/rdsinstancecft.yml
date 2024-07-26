@@ -27,3 +27,9 @@ jobs:
           --template-file Database/rds-aurora-template.yml \
           --stack-name rds-a-stack \
           --capabilities CAPABILITY_NAMED_IAM
+            --parameter-overrides \
+            MasterUserPassword=MySecurePassword \
+            VpcId=vpc-0123456789abcdef \
+            MasterUsername=admin \
+            SubnetIds=subnet-01234567,subnet-89abcdef \
+            SecurityGroupIds=sg-0123456789abcdef
