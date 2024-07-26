@@ -28,8 +28,9 @@ jobs:
           --stack-name rds-a-stack \
           --capabilities CAPABILITY_NAMED_IAM
             --parameter-overrides \
-            MasterUserPassword=MySecurePassword \
-            VpcId=vpc-0123456789abcdef \
-            MasterUsername=admin \
-            SubnetIds=subnet-01234567,subnet-89abcdef \
-            SecurityGroupIds=sg-0123456789abcdef
+          --parameter-overrides \
+            MasterUserPassword=${{ secrets.MASTER_USER_PASSWORD }} \
+            VpcId=${{ secrets.VPC_ID }} \
+            MasterUsername=${{ secrets.MASTER_USERNAME }} \
+            SubnetId=${{ secrets.SUBNET_ID }} \
+            SecurityGroupId=${{ secrets.SECURITY_GROUP_ID }}

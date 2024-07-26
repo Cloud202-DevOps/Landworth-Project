@@ -60,7 +60,7 @@ Resources:
       Engine: aurora-mysql
       EngineVersion: '8.0' # Specify the version of Aurora MySQL
       BackupRetentionPeriod: 7
-      VpcSecurityGroupIds: !Ref SecurityGroupIds
+      VpcSecurityGroupId: !Ref SecurityGroupId
       DBSubnetGroupName: !Ref DBSubnetGroup
       StorageEncrypted: true
       DeletionProtection: false
@@ -81,7 +81,7 @@ Resources:
     Type: AWS::RDS::DBSubnetGroup
     Properties: 
       DBSubnetGroupDescription: "Subnet group for Aurora MySQL"
-      SubnetIds: !Ref SubnetIds
+      SubnetId: !Ref SubnetId
 
 Outputs:
   DBClusterEndpoint:
