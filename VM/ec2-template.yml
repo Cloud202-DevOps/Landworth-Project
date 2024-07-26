@@ -1,5 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: 'EC2 Instance Creation'
+
+Parameters:
+  devops-vpc-stack:
+    Type: String
+    Description: The name of the VPC stack to import values from
+
 Resources:
   MyEC2Instance:
     Type: AWS::EC2::Instance
@@ -9,7 +15,11 @@ Resources:
       KeyName: cdpipeline  
       SubnetId: 
         Fn::ImportValue: 
-          !Sub "${devops-vpc-stack}-Subnet1ID"
+          Fn::Sub: 
+            - "${VpcStack}-Subnet1ID"
+            - VpcStack: !Ref devops-vpc-stack
       SecurityGroupIds: 
         - Fn::ImportValue: 
-            !Sub "${devops-vpc-stack}-SecurityGroupID"
+            Fn::Sub:
+              - "${VpcStack}-SecurityGroupID"
+              - VpcStack: !Ref devops-vpc-stack
