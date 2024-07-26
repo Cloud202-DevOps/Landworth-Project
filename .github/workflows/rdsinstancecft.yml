@@ -28,7 +28,6 @@ jobs:
           --stack-name rds-a-stack \
           --capabilities CAPABILITY_NAMED_IAM
             --parameter-overrides \
-          --parameter-overrides \
             MasterUserPassword=${{ secrets.MASTER_USER_PASSWORD }} \
             VpcId=${{ secrets.VPC_ID }} \
             MasterUsername=${{ secrets.MASTER_USERNAME }} \
