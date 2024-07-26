@@ -25,7 +25,7 @@ jobs:
       run: |
         aws cloudformation deploy \
           --template-file Database/rds-aurora-template.yml \
-          --stack-name rds-aurora-stack \
+          --stack-name new-rds-aurora-stack \
           --capabilities CAPABILITY_NAMED_IAM \
           --parameter-overrides \
             MasterUserPassword=${{ secrets.MASTER_USER_PASSWORD }} \
