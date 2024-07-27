@@ -18,6 +18,7 @@ Outputs:
   HostedZoneId:
     Description: 'Hosted Zone ID'
     Value: !Ref HostedZone
+
   NameServers:
     Description: 'Name Servers'
-    Value: !Join [',', !GetAtt HostedZone.NameServers]
+    Value: !Join [', ', !GetAtt HostedZone.NameServers]

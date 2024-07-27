@@ -25,3 +25,10 @@ jobs:
           --stack-name route53-hosted-zone \
           --parameter-overrides DomainName=example.com \
           --capabilities CAPABILITY_IAM
+
+    - name: Verify stack deployment
+      run: |
+        aws cloudformation describe-stacks \
+          --stack-name my-route53-hosted-zone \
+          --query "Stacks[0].StackStatus" \
+          --output text
