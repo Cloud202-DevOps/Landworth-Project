@@ -1,0 +1,96 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'IAM structure for Platform Alt5'
+
+Resources:
+  SolutionArchitectGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: SolutionArchitectGroup
+
+  DeveloperGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: DeveloperGroup
+
+  ViewerGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: ViewerGroup
+
+  SolutionArchitectPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: SolutionArchitectPolicy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: '*'
+            Resource: '*'
+
+  DeveloperPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: DeveloperPolicy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - ec2:Describe*
+              - ec2:StartInstances
+              - ec2:StopInstances
+              - s3:*
+              - rds:Describe*
+              - rds:ModifyDBInstance
+              - elasticloadbalancing:Describe*
+              - route53:List*
+              - route53:Get*
+              - amplify:*
+              - bedrock:InvokeModel
+              - bedrock:List*
+              - cloudformation:Describe*
+              - cloudformation:List*
+              - cloudformation:ValidateTemplate
+            Resource: '*'
+
+  ViewerPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      ManagedPolicyName: ViewerPolicy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - ec2:Describe*
+              - s3:Get*
+              - s3:List*
+              - rds:Describe*
+              - elasticloadbalancing:Describe*
+              - route53:List*
+              - route53:Get*
+              - amplify:Get*
+              - amplify:List*
+              - bedrock:List*
+              - cloudformation:Describe*
+              - cloudformation:List*
+            Resource: '*'
+
+  SolutionArchitectGroupPolicyAttachment:
+    Type: AWS::IAM::PolicyAttachment
+    Properties:
+      GroupName: !Ref SolutionArchitectGroup
+      PolicyArn: !Ref SolutionArchitectPolicy
+
+  DeveloperGroupPolicyAttachment:
+    Type: AWS::IAM::PolicyAttachment
+    Properties:
+      GroupName: !Ref DeveloperGroup
+      PolicyArn: !Ref DeveloperPolicy
+
+  ViewerGroupPolicyAttachment:
+    Type: AWS::IAM::PolicyAttachment
+    Properties:
+      GroupName: !Ref ViewerGroup
+      PolicyArn: !Ref ViewerPolicy
