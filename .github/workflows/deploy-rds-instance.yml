@@ -22,7 +22,7 @@ jobs:
     - name: Deploy RDS instance
       run: |
         aws cloudformation deploy \
-          --template-file Database/rds-instance-template.yaml \
+          --template-file Database/rds-instance-template.yml \
           --stack-name mysql-rds-stack \
           --parameter-overrides \
             DBInstanceIdentifier=my-rds-instance \
