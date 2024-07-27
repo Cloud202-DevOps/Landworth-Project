@@ -21,6 +21,8 @@ Resources:
     Type: AWS::IAM::ManagedPolicy
     Properties:
       ManagedPolicyName: SolutionArchitectPolicy
+      Groups:
+        - !Ref SolutionArchitectGroup
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -32,6 +34,8 @@ Resources:
     Type: AWS::IAM::ManagedPolicy
     Properties:
       ManagedPolicyName: DeveloperPolicy
+      Groups:
+        - !Ref DeveloperGroup
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -58,6 +62,8 @@ Resources:
     Type: AWS::IAM::ManagedPolicy
     Properties:
       ManagedPolicyName: ViewerPolicy
+      Groups:
+        - !Ref ViewerGroup
       PolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -76,21 +82,3 @@ Resources:
               - cloudformation:Describe*
               - cloudformation:List*
             Resource: '*'
-
-  SolutionArchitectGroupPolicyAttachment:
-    Type: AWS::IAM::PolicyAttachment
-    Properties:
-      GroupName: !Ref SolutionArchitectGroup
-      PolicyArn: !Ref SolutionArchitectPolicy
-
-  DeveloperGroupPolicyAttachment:
-    Type: AWS::IAM::PolicyAttachment
-    Properties:
-      GroupName: !Ref DeveloperGroup
-      PolicyArn: !Ref DeveloperPolicy
-
-  ViewerGroupPolicyAttachment:
-    Type: AWS::IAM::PolicyAttachment
-    Properties:
-      GroupName: !Ref ViewerGroup
-      PolicyArn: !Ref ViewerPolicy
