@@ -4,8 +4,6 @@ on:
   push:
     branches:
       - dev-m
-    paths:
-      - '/iAM/iam-structure.yaml'
 
 jobs:
   deploy:
