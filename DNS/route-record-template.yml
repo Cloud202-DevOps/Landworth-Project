@@ -1,0 +1,40 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Create Route 53 DNS records'
+
+Parameters:
+  HostedZoneName:
+    Type: String
+    Description: 'The name of the hosted zone (e.g., example.com.)'
+  RecordName:
+    Type: String
+    Description: 'The name of the DNS record (e.g., mysite.example.com.)'
+  RecordType:
+    Type: String
+    Default: 'A'
+    AllowedValues:
+      - 'A'
+      - 'AAAA'
+      - 'CNAME'
+    Description: 'The type of the DNS record'
+  TTL:
+    Type: Number
+    Default: 900
+    Description: 'The TTL (Time To Live) of the DNS record'
+  IPAddresses:
+    Type: CommaDelimitedList
+    Description: 'Comma-separated list of IP addresses'
+
+Resources:
+  myDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Ref HostedZoneName
+      Name: !Ref RecordName
+      Type: !Ref RecordType
+      TTL: !Ref TTL
+      ResourceRecords: !Ref IPAddresses
+
+Outputs:
+  RecordSetName:
+    Description: 'The name of the created record set'
+    Value: !Ref myDNSRecord
