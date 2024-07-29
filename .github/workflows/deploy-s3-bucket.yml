@@ -1,4 +1,4 @@
-name: Deploy CloudFormation Stack
+name: Deploy CloudFormation Stack for S3 Bucket
 
 on:
   push:
@@ -23,6 +23,6 @@ jobs:
     - name: Deploy CloudFormation stack
       run: |
         aws cloudformation deploy \
-          --template-file Database/s3-buckettemplate.yml \
+          --template-file Database/s3-bucket-template.yml \
           --stack-name my-s3-bucket-stack \
           --capabilities CAPABILITY_NAMED_IAM
