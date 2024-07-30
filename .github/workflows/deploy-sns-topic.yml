@@ -24,7 +24,7 @@ jobs:
     - name: Deploy CloudFormation Stack
       run: |
         aws cloudformation deploy \
-          --template-file sns-topic-template.yaml \
+          --template-file sns-topic-template.yml \
           --stack-name sns-stack \
           --capabilities CAPABILITY_NAMED_IAM \
           --parameter-overrides TopicName=MySNSTopic EmailAddress=meenal.j@cloud202.com
