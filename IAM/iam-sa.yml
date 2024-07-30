@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  # Solution Architect Group
+  SolutionArchitectGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: SolutionArchitectGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AdministratorAccess
+        - arn:aws:iam::842387632939:policy/SolutionArchitectRegionPolicy
