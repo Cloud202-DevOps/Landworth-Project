@@ -1,0 +1,45 @@
+name: Deploy CloudFormation and Notify via SNS
+
+on:
+  push:
+    branches:
+      - dev-m
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Deploy CloudFormation Stack
+      run: |
+        aws cloudformation deploy \
+          --template-file sns-topic-template.yaml \
+          --stack-name sns-stack \
+          --capabilities CAPABILITY_NAMED_IAM \
+          --parameter-overrides TopicName=MySNSTopic EmailAddress=meenal.j@cloud202.com
+
+    - name: Retrieve SNS Topic ARN
+      id: sns
+      run: |
+        arn=$(aws cloudformation describe-stacks \
+          --stack-name sns-stack \
+          --query "Stacks[0].Outputs[?OutputKey=='TopicArn'].OutputValue" \
+          --output text)
+        echo "SNS_TOPIC_ARN=$arn" >> $GITHUB_ENV
+
+    - name: Send Notification via SNS
+      run: |
+        aws sns publish \
+          --topic-arn $SNS_TOPIC_ARN \
+          --message "CloudFormation deployment completed successfully for stack sns-stack"

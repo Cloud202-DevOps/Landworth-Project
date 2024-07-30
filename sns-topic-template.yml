@@ -1,0 +1,34 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create an SNS topic with parameters.
+
+Parameters:
+  TopicName:
+    Type: String
+    Description: The name of the SNS topic
+    Default: CloudFormationDeployments
+    AllowedPattern: "^[a-zA-Z0-9-_]+$"
+    ConstraintDescription: "Topic name can only contain alphanumeric characters, hyphens, and underscores."
+
+  EmailAddress:
+    Type: String
+    Description: The email address to subscribe to the SNS topic
+    AllowedPattern: "^[\\w\\.-]+@[\\w\\.-]+\\.\\w+$"
+    ConstraintDescription: "Email must be a valid email address."
+
+Resources:
+  SNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Ref TopicName
+
+  SNSTopicSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref SNSTopic
+      Protocol: email
+      Endpoint: !Ref EmailAddress
+
+Outputs:
+  TopicArn:
+    Description: The ARN of the SNS topic
+    Value: !Ref SNSTopic
