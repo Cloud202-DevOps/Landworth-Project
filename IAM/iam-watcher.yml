@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  # Watcher Group
+  WatcherGroup:
+    Type: AWS::IAM::Group
+    Properties:
+      GroupName: WatcherGroup
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/ReadOnlyAccess
+        - arn:aws:iam::aws:policy/job-function/Billing
+        - arn:aws:iam::aws:policy/AmazonCloudWatchRUMReadOnlyAccess
+        - arn:aws:iam::aws:policy/AWSCloudTrail_ReadOnlyAccess
+        - arn:aws:iam::842387632939:policy/WatcherControlTowerPolicy
