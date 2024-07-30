@@ -23,8 +23,8 @@ jobs:
       - name: Deploy CloudFormation stack
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          name: iam-sa-stack
-          template: ./IAM/iam-sa.yml
+          name: iam-dev-stack
+          template: ./IAM/iam-dev.yml
           capabilities: CAPABILITY_NAMED_IAM
           no-fail-on-empty-changeset: true
     
@@ -32,4 +32,4 @@ jobs:
         run: |
           aws sns publish \
           --topic-arn ${{ secrets.SNS_TOPIC_ARN}} \
-          --message "CloudFormation deployment completed successfully for iam-sa-stack"
+          --message "CloudFormation deployment completed successfully for iam-dev-stack"
