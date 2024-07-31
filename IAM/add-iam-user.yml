@@ -10,6 +10,8 @@ Parameters:
     Description: The name of the IAM group to add the user to
     AllowedValues:
       - SolutionArchitectGroup
+      - DeveloperGroup
+      - WatcherGroup
 
 Resources:
   # Create IAM User
