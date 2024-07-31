@@ -1,9 +1,8 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Parameters:
-  UserName: devops_king
+  UserName:
     Type: String
     Description: The name of the IAM user to be created
-    
 
   GroupName:
     Type: String
@@ -31,13 +30,13 @@ Resources:
     Properties:
       GroupName: !Ref GroupName
       Users:
-        - !Ref IAMUser
+        - !Ref UserName
 
   # Optional: Create Access Keys for the User
   IAMUserAccessKey:
     Type: AWS::IAM::AccessKey
     Properties:
-      UserName: !Ref IAMUser
+      UserName: !Ref UserName
 
 Outputs:
   AccessKeyId:
