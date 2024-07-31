@@ -39,12 +39,7 @@ jobs:
             UserName=${{ github.event.inputs.user-name }}--updated
             GroupName=${{ github.event.inputs.group-name }}--updated
           capabilities: CAPABILITY_NAMED_IAM
-          no-fail-on-empty-changeset: true
-          no-fail-on-empty-changeset: true
-          no-execute-changeset: 0
-          no-delete-failed-changeset: 0
-          disable-rollback: 0
-          termination-protection: 0
+
 
       - name: Display Access Keys
         run: |
