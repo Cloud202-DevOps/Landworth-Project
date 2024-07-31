@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Parameters:
+  UserName:
+    Type: String
+    Description: The name of the IAM user to be created
+
+  GroupName:
+    Type: String
+    Description: The name of the IAM group to add the user to
+    AllowedValues:
+      - SolutionArchitectGroup
+
+Resources:
+  # Create IAM User
+  IAMUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Ref UserName
+
+  # Add User to IAM Group
+  IAMUserToGroupAddition:
+    Type: AWS::IAM::UserToGroupAddition
+    Properties:
+      GroupName: !Ref GroupName
+      Users:
+        - !Ref IAMUser
+
+  # Optional: Create Access Keys for the User
+  IAMUserAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref IAMUser
+
+Outputs:
+  AccessKeyId:
+    Description: Access Key ID of the created IAM user
+    Value: !Ref IAMUserAccessKey
+
+  SecretAccessKey:
+    Description: Secret Access Key of the created IAM user
+    Value: !GetAtt IAMUserAccessKey.SecretAccessKey

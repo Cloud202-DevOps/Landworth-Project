@@ -1,0 +1,47 @@
+name: Create IAM User
+
+on:
+  workflow_dispatch:
+    inputs:
+      user-name:
+        description: 'Name of the IAM user to create'
+        required: true
+      group-name:
+        description: 'Name of the IAM group to add the user to'
+        required: true
+        default: DeveloperGroup
+        options:
+          - SolutionArchitectGroup
+          - DeveloperGroup
+          - WatcherGroup
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy CloudFormation stack
+        uses: aws-actions/aws-cloudformation-github-deploy@v1
+        with:
+          name: create-iam-user-stack
+          template: ./IAM/add-iam-user.yml
+          parameters: |
+            UserName=${{ github.event.inputs.user-name }}
+            GroupName=${{ github.event.inputs.group-name }}
+          capabilities: CAPABILITY_NAMED_IAM
+          no-fail-on-empty-changeset: true
+
+      - name: Display Access Keys
+        run: |
+          echo "Access Key ID: ${{ steps.deploy.outputs.AccessKeyId }}"
+          echo "Secret Access Key: ${{ steps.deploy.outputs.SecretAccessKey }}"
