@@ -39,7 +39,7 @@ jobs:
         id: deploy
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
-          name: create-iam-user-stack
+          name: new-iam-user-stack
           template: ./IAM/add-iam-user.yml
           parameter-overrides: >-
             UserName=${{ github.event.inputs.user-name || github.actor }},
