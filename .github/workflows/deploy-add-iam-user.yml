@@ -1,17 +1,20 @@
 name: Create IAM User
 
 on:
-    push:
-      branches:
-        - dev-m
+  push:
+    branches:
+      - dev-m
+  workflow_dispatch:
     inputs:
       user-name:
         description: 'Name of the IAM user to create'
         required: true
+        type: string
       group-name:
         description: 'Name of the IAM group to add the user to'
         required: true
-        default: DeveloperGroup
+        type: choice
+        default: 'DeveloperGroup'
         options:
           - SolutionArchitectGroup
           - DeveloperGroup
@@ -33,15 +36,16 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy CloudFormation stack
+        id: deploy
         uses: aws-actions/aws-cloudformation-github-deploy@v1
         with:
           name: create-iam-user-stack
           template: ./IAM/add-iam-user.yml
-          parameters: |
+          parameter-overrides: |
             UserName=${{ github.event.inputs.user-name }}
             GroupName=${{ github.event.inputs.group-name }}
           capabilities: CAPABILITY_NAMED_IAM
-          no-fail-on-empty-changeset: false
+          no-fail-on-empty-changeset: "1"
 
       - name: Display Access Keys
         run: |
