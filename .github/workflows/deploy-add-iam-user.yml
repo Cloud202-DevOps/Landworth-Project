@@ -36,8 +36,8 @@ jobs:
           name: create-iam-user-stack
           template: ./IAM/add-iam-user.yml
           parameters: |
-            UserName=${{ github.event.inputs.user-name }}
-            GroupName=${{ github.event.inputs.group-name }}
+            UserName=${{ github.event.inputs.user-name }}--updated
+            GroupName=${{ github.event.inputs.group-name }}--updated
           capabilities: CAPABILITY_NAMED_IAM
           no-fail-on-empty-changeset: true
           no-fail-on-empty-changeset: true
