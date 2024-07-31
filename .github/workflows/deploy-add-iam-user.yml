@@ -1,7 +1,9 @@
 name: Create IAM User
 
 on:
-  workflow_dispatch:
+    push:
+      branches:
+        - dev-m
     inputs:
       user-name:
         description: 'Name of the IAM user to create'
