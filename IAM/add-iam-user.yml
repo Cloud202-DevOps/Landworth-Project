@@ -20,7 +20,7 @@ Resources:
         - Key: Environment
           Value: Production
         - Key: LastUpdated
-          Value: !Ref 'AWS::Date'
+          Value: !Join ['', [!Ref 'AWS::StackName', '-', !Ref 'AWS::Region']]
 
   IAMUserToGroupAddition:
     Type: AWS::IAM::UserToGroupAddition
