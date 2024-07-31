@@ -3,7 +3,6 @@ Parameters:
   UserName:
     Type: String
     Description: The name of the IAM user to be created
-
   GroupName:
     Type: String
     Description: The name of the IAM group to add the user to
@@ -13,7 +12,6 @@ Parameters:
       - WatcherGroup
 
 Resources:
-  # Create IAM User
   IAMUser:
     Type: AWS::IAM::User
     Properties:
@@ -22,27 +20,24 @@ Resources:
         - Key: Environment
           Value: Production
         - Key: LastUpdated
-          Value: "2024-07-31"
+          Value: !Ref 'AWS::Date'
 
-  # Add User to IAM Group
   IAMUserToGroupAddition:
     Type: AWS::IAM::UserToGroupAddition
     Properties:
       GroupName: !Ref GroupName
       Users:
-        - !Ref UserName
+        - !Ref IAMUser
 
-  # Optional: Create Access Keys for the User
   IAMUserAccessKey:
     Type: AWS::IAM::AccessKey
     Properties:
-      UserName: !Ref UserName
+      UserName: !Ref IAMUser
 
 Outputs:
   AccessKeyId:
     Description: Access Key ID of the created IAM user
     Value: !Ref IAMUserAccessKey
-
   SecretAccessKey:
     Description: Secret Access Key of the created IAM user
     Value: !GetAtt IAMUserAccessKey.SecretAccessKey
