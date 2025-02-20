@@ -1,6 +1,8 @@
-# 🌟 AWS CI/CD with CloudFormation 🌟
+# 🌟 Landworth Project 🌟
 
-Welcome to the **AWS CI/CD with CloudFormation** repository! This project is designed to transform your AWS infrastructure management and application deployment processes into a seamless and automated experience using the power of Infrastructure as Code and continuous integration and deployment.
+Welcome to the **Landworth Project** repository! This project is The Landworth solution is a comprehensive implementation of AWS services and Generative AI technologies, designed to deliver precision, 
+automation, and scalability. The components are structured to align technical efficiency with business outcomes, ensuring both seamless 
+performance and tangible results for Landworth's stakeholders.
 
 ## 🚀 Overview
 
